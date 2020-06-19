@@ -4,6 +4,8 @@ install.packages("Hmisc", "summarytools", "anchors")
 
 install.packages( "anchors")
 
+install.packages( "dcast")
+
 library(tidyverse, Hmisc, summarytools)
 
 library(dplyr)
@@ -11,6 +13,8 @@ library(dplyr)
 library(anchors)
 
 library(forcats)
+
+library(dcast)
 
 houses_rent <- read_csv(here::here("houses_to_rent_v2.csv"), col_names = TRUE)
 
@@ -60,7 +64,14 @@ hist(areahouses_rent$Area)
 boxplot(preco_m2~Quartos,data=areahouses_rent, 
         xlab="Quartos", ylab="preco_m2")
 
+aggregate(houses_rent[, c('preco_m2')], list(houses_rent$Mobilia), mean)
 
 
+aggregate(houses_rent[, c('Quartos','Mobilia','preco_m2')], list(houses_rent$Cidade), mean)
+
+
+aggregate(houses_rent[, c('Mobilia','preco_m2')], list(houses_rent$Cidade), mean)
+
+dcast(houses_rent, Mobilia ~ Cidade, value.var="c2", fun.aggregate=sum)
 
 
